@@ -4,6 +4,7 @@ import 'package:scouter/src/application/module/app_module.dart';
 import 'package:scouter/src/domain/http_controller.dart';
 import 'package:scouter/src/domain/http_verbs.dart';
 import 'package:scouter/src/domain/middleware.dart';
+import 'package:scouter/src/domain/module.dart';
 import 'package:scouter/src/domain/route.dart';
 // import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/start.dart';
@@ -71,6 +72,31 @@ class GameController extends RestController {
   }
 }
 
+@HttpController()
+class ProfileController extends RestController {
+  @Get("/private")
+  HttpResponse getById(HttpRequest request) {
+    return HttpResponse(
+      body: {"profile": "Private Mode"},
+      status: 200,
+    );
+  }
+}
+
+class TestModule implements Module {
+  @override
+  List<RestController> get controllers => [
+        GameController(),
+        ProfileController(),
+      ];
+
+  @override
+  List<HttpMiddleware> get middlewares => [];
+
+  @override
+  String get preffix => "test";
+}
+
 void main() async {
   // final routes = ControllerReflections.getControllerRoutes(
   //   FeatureController(),
@@ -83,6 +109,9 @@ void main() async {
 
   runServer(
     AppModule(
+      modules: [
+        TestModule(),
+      ],
       controllers: [
         FeatureController(),
         GameController(),

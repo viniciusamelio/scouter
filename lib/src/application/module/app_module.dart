@@ -11,7 +11,7 @@ class AppModule implements Module {
   });
 
   @override
-  final String preffix = "/";
+  final String preffix = "";
 
   @override
   final List<RestController> controllers;

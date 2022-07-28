@@ -1,14 +1,23 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:scouter/src/application/di/injections.dart';
 import 'package:scouter/src/application/module/app_module.dart';
 import 'package:scouter/src/domain/http_controller.dart';
 import 'package:scouter/src/domain/http_verbs.dart';
 import 'package:scouter/src/domain/middleware.dart';
 import 'package:scouter/src/domain/route.dart';
-import 'package:scouter/src/infra/core/controller_reflections.dart';
+// import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/start.dart';
 
 @HttpController(name: "main")
 class FeatureController extends RestController {
+  FeatureController() {
+    inject<FakeProvider>(
+      SingletonInjection(
+        FakeProvider(),
+      ),
+    );
+  }
+
   @Get("/:id")
   HttpResponse getById(HttpRequest request) {
     return HttpResponse(
@@ -21,8 +30,11 @@ class FeatureController extends RestController {
 
   @Post("/save")
   HttpResponse save(HttpRequest request) {
+    final FakeProvider teste = get();
     return HttpResponse(
-      body: {},
+      body: {
+        "teste": teste.name,
+      },
       status: 201,
     );
   }
@@ -60,14 +72,14 @@ class GameController extends RestController {
 }
 
 void main() async {
-  final routes = ControllerReflections.getControllerRoutes(
-    FeatureController(),
-  );
+  // final routes = ControllerReflections.getControllerRoutes(
+  //   FeatureController(),
+  // );
 
-  for (var route in routes) {
-    print("Path: ${route.path}");
-    print("Method: ${route.verb}");
-  }
+  // for (var route in routes) {
+  //   print("Path: ${route.path}");
+  //   print("Method: ${route.verb}");
+  // }
 
   runServer(
     AppModule(
@@ -78,4 +90,8 @@ void main() async {
     ),
     port: 8084,
   );
+}
+
+class FakeProvider {
+  String name = "fakezão";
 }

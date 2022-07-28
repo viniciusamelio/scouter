@@ -1,6 +1,6 @@
 import 'package:scouter/src/domain/di.dart';
 
-class SingletonInjection<T> implements Injection<T> {
+class SingletonInjection<T extends Object> implements Injection<T> {
   SingletonInjection(
     this.instance, {
     this.name,
@@ -13,9 +13,12 @@ class SingletonInjection<T> implements Injection<T> {
 
   @override
   final String? name;
+
+  @override
+  Type type = T;
 }
 
-class FactoryInjection<T> implements Injection<T> {
+class FactoryInjection<T extends Object> implements Injection<T> {
   FactoryInjection(
     this.instance, {
     this.name,
@@ -27,4 +30,7 @@ class FactoryInjection<T> implements Injection<T> {
 
   @override
   final String? name;
+
+  @override
+  Type type = T;
 }

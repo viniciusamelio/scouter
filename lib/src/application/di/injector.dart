@@ -16,19 +16,19 @@ class KiwiInjector implements InjectionManager<KiwiContainer> {
   static final KiwiInjector instance = KiwiInjector._internal();
 
   @override
-  void register<T>(Injection<T> injection) {
-    final instance = injection;
+  void register<T extends Object>(Injection<T> injection) {
+    final injectionInstance = injection;
     if (injection is FactoryInjection) {
       injector.registerFactory<T>(
-        (container) => instance.builder(),
-        name: instance.name,
+        (container) => injectionInstance.builder(),
+        name: injectionInstance.name,
       );
       return;
     }
 
     injector.registerSingleton<T>(
-      (container) => instance.builder(),
-      name: instance.name,
+      (container) => injectionInstance.builder(),
+      name: injectionInstance.name,
     );
   }
 }

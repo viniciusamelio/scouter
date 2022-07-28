@@ -1,6 +1,7 @@
 import 'package:scouter/src/application/module/app_module.dart';
 import 'package:scouter/src/domain/http_controller.dart';
 import 'package:scouter/src/domain/http_verbs.dart';
+import 'package:scouter/src/domain/middleware.dart';
 import 'package:scouter/src/domain/route.dart';
 import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/start.dart';
@@ -26,6 +27,31 @@ class FeatureController extends RestController {
   }
 }
 
+class ExampleMidleware implements HttpMiddleware {
+  const ExampleMidleware();
+  @override
+  Future<void> handle(HttpRequest request) async {
+    if (request.path.contains("/game")) {
+      throw "We are under maintenance. please, try it soon";
+    }
+  }
+}
+
+@HttpController(
+  middlewares: [
+    ExampleMidleware(),
+  ],
+)
+class GameController extends RestController {
+  @Get("/")
+  HttpResponse getById(HttpRequest request) {
+    return HttpResponse(
+      body: {"game": "Mario"},
+      status: 202,
+    );
+  }
+}
+
 void main() async {
   final routes = ControllerReflections.getControllerRoutes(
     FeatureController(),
@@ -40,6 +66,7 @@ void main() async {
     AppModule(
       controllers: [
         FeatureController(),
+        GameController(),
       ],
     ),
     port: 8084,

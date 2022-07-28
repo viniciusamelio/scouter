@@ -1,7 +1,6 @@
 import 'package:alfred/alfred.dart';
 import 'package:scouter/src/application/module/app_module.dart';
 import 'package:scouter/src/infra/core/controller_reflections.dart';
-import 'package:scouter/src/infra/parser/alfred_middleware_parser.dart';
 import 'package:scouter/src/infra/parser/alfred_route_parser.dart';
 
 Future<void> runServer(
@@ -30,11 +29,5 @@ Future<void> _setupAppModule(
         AlfredRouteParser.parse(route),
       );
     }
-  }
-  for (final middleware in appModule.middlewares) {
-    app.all(
-      "${appModule.preffix}*",
-      AlfredMiddlewareParser.parse(middleware),
-    );
   }
 }

@@ -16,8 +16,6 @@ abstract class ControllerReflections {
     }
     final controllerAnnotation = clazzMetas.first;
 
-    print("Controller Name: ${controllerAnnotation.reflectee.name}");
-
     ref.type.declarations.forEach((_, member) {
       if (!member.owner!.simpleName.toString().contains("Controller")) {
         throw "Your controller should contain 'Controller' in its class declaration";
@@ -33,6 +31,8 @@ abstract class ControllerReflections {
           HttpRoute(
             verb: annotation.verb,
             path: annotation.route,
+            middlewares:
+                (clazzMetas.first.reflectee as HttpController).middlewares,
             preffix:
                 "/${controllerAnnotation.reflectee.name != "" ? controllerAnnotation.reflectee.name.toString().toLowerCase() : ref.reflectee.runtimeType.toString().replaceAll('Controller', '').toLowerCase()}",
             handler: (HttpRequest request) async {

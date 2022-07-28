@@ -13,7 +13,13 @@ class AlfredMiddlewareParser {
   ) parse(HttpMiddleware middleware) {
     return (req, res) async {
       final Map<String, dynamic> headers = AlfredHeadersParser.parse(req);
-      final request = HttpRequest(headers: headers);
+      final request = HttpRequest(
+        headers: headers,
+        path: req.route,
+        params: req.params,
+        body: await req.body,
+      );
+      print("ta indo");
       return middleware.handle(
         request,
       );

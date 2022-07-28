@@ -7,12 +7,16 @@ typedef RouteHandler = Future<HttpResponse> Function(
 class HttpRequest {
   HttpRequest({
     required this.headers,
+    required this.path,
     this.body,
     this.params,
+    this.middlewares = const [],
   });
+  final String path;
   final dynamic headers;
   final dynamic body;
   final Map<String, dynamic>? params;
+  final List<HttpMiddleware> middlewares;
 }
 
 class HttpResponse {
@@ -32,12 +36,12 @@ class HttpRoute {
     required this.handler,
     required this.path,
     this.verb = "get",
-    this.middleware,
+    this.middlewares,
     this.preffix,
   });
   final String path;
   final RouteHandler handler;
   final String verb;
   final String? preffix;
-  final HttpMiddleware? middleware;
+  final List<HttpMiddleware>? middlewares;
 }

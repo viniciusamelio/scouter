@@ -10,14 +10,20 @@ abstract class ControllerReflections {
     final ref = reflect(clazz);
 
     final clazzMetas = ref.type.metadata;
+    if (clazzMetas.isEmpty) {
+      throw ArgumentError.value(
+          "Set @HttpController annotation to your controller class");
+    }
     if (clazzMetas.first.type.reflectedType != HttpController) {
-      throw "Set @HttpController annotation to your controller class";
+      throw ArgumentError.value(
+          "Set @HttpController annotation to your controller class");
     }
     final controllerAnnotation = clazzMetas.first;
 
     ref.type.declarations.forEach((_, member) {
       if (!member.owner!.simpleName.toString().contains("Controller")) {
-        throw "Your controller should contain 'Controller' in its class declaration";
+        throw Exception(
+            "Your controller should contain 'Controller' in its class declaration");
       }
 
       final httpVerbAnnotations = member.metadata

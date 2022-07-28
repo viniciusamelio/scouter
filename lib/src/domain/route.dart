@@ -33,9 +33,11 @@ class HttpRoute {
     required this.path,
     this.verb = "get",
     this.middleware,
+    this.preffix,
   });
   final String path;
   final RouteHandler handler;
   final String verb;
+  final String? preffix;
   final HttpMiddleware? middleware;
 }

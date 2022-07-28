@@ -33,6 +33,8 @@ abstract class ControllerReflections {
           HttpRoute(
             verb: annotation.verb,
             path: annotation.route,
+            preffix:
+                "/${controllerAnnotation.reflectee.name != "" ? controllerAnnotation.reflectee.name.toString().toLowerCase() : ref.reflectee.runtimeType.toString().replaceAll('Controller', '').toLowerCase()}",
             handler: (HttpRequest request) async {
               return ref.getField(member.simpleName).reflectee(request);
             },

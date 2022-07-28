@@ -6,7 +6,7 @@ import 'alfred_headers_parser.dart';
 class AlfredRouteParser {
   static alfred.HttpRoute parse(HttpRoute route) {
     return alfred.HttpRoute(
-      route.path,
+      "${route.preffix}${route.path}",
       (req, res) => _handlerParser(
         req,
         res,

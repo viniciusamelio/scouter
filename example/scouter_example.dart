@@ -1,3 +1,4 @@
+import 'package:fpdart/fpdart.dart';
 import 'package:scouter/src/application/module/app_module.dart';
 import 'package:scouter/src/domain/http_controller.dart';
 import 'package:scouter/src/domain/http_verbs.dart';
@@ -30,10 +31,16 @@ class FeatureController extends RestController {
 class ExampleMidleware implements HttpMiddleware {
   const ExampleMidleware();
   @override
-  Future<void> handle(HttpRequest request) async {
+  Future<Either<HttpResponse, void>> handle(HttpRequest request) async {
     if (request.path.contains("/game")) {
-      throw "We are under maintenance. please, try it soon";
+      return Left(
+        HttpResponse(
+          status: 400,
+          body: {"status": "/game is not available"},
+        ),
+      );
     }
+    return Right(null);
   }
 }
 

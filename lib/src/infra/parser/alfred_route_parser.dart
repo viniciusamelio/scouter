@@ -40,7 +40,7 @@ _handlerParser(
     res.headers.add(key, response.headers[key]);
   }
 
-  _applyMiddleware(
+  await _applyMiddleware(
     middlewares,
     request,
   );
@@ -69,13 +69,21 @@ alfred.Method _methodParser(String httpVerb) {
   }
 }
 
-_applyMiddleware(
+/// It applies the middleware list related to the controller, that is passed to each route inside it
+Future _applyMiddleware(
   List<HttpMiddleware>? middlewares,
   HttpRequest request,
-) {
+) async {
   if (middlewares != null) {
     for (var middleware in middlewares) {
-      middleware.handle(request);
+      final responseOrNull = await middleware.handle(request);
+      return responseOrNull.fold(
+        (l) => throw alfred.AlfredException(
+          l.status,
+          l.body,
+        ),
+        (r) => null,
+      );
     }
   }
 }

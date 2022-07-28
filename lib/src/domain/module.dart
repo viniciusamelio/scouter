@@ -1,5 +1,6 @@
-import 'package:scouter/src/domain/http_controller.dart';
 import 'package:scouter/src/domain/middleware.dart';
+
+import '../application/controller/rest_controller.dart';
 
 abstract class Module {
   const Module({

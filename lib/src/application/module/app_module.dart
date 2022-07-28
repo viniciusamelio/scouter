@@ -1,7 +1,7 @@
-import 'package:scouter/src/domain/http_controller.dart';
 import 'package:scouter/src/domain/module.dart';
 
 import "../../domain/middleware.dart";
+import '../controller/rest_controller.dart';
 
 class AppModule implements Module {
   const AppModule({

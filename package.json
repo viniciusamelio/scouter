@@ -1,0 +1,15 @@
+{
+    "name": "scouter",
+    "version": "1.0.0",
+    "description": "A sample command-line application with an entrypoint in `bin/`, library code in `lib/`, and example unit test in `test/`.",
+    "directories": {
+      "lib": "lib"
+    },
+    "scripts": {
+      "example" : "nodemon -x 'dart run example/scouter_example.dart' -e dart"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+  }
+  

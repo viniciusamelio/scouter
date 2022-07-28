@@ -5,7 +5,7 @@ import 'package:scouter/src/domain/route.dart';
 import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/start.dart';
 
-@HttpController(name: "feature")
+@HttpController(name: "main")
 class FeatureController extends RestController {
   @Get("/:id")
   HttpResponse getById(HttpRequest request) {
@@ -42,5 +42,6 @@ void main() async {
         FeatureController(),
       ],
     ),
+    port: 8084,
   );
 }

@@ -11,7 +11,7 @@ abstract class ControllerReflections {
 
     final clazzMetas = ref.type.metadata;
     if (clazzMetas.first.type.reflectedType != HttpController) {
-      throw "Set @Controller annotation to your controller class";
+      throw "Set @HttpController annotation to your controller class";
     }
     final controllerAnnotation = clazzMetas.first;
 

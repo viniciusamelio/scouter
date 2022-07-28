@@ -13,6 +13,7 @@ class AlfredRouteParser {
         res,
         route.handler,
         route.middlewares,
+        route.verb,
       ),
       _methodParser(route.verb),
     );
@@ -25,6 +26,7 @@ _handlerParser(
   alfred.HttpResponse res,
   RouteHandler handler,
   List<HttpMiddleware>? middlewares,
+  String httpVerb,
 ) async {
   final Map<String, dynamic> headers = AlfredHeadersParser.parse(req);
   final request = HttpRequest(
@@ -34,7 +36,10 @@ _handlerParser(
     path: req.route,
   );
   final response = await handler(request);
-  res.statusCode = response.status;
+  res.statusCode = _setStatusCode(
+    httpVerb: httpVerb,
+    responseStatus: response.status,
+  );
 
   for (var key in response.headers.keys) {
     res.headers.add(key, response.headers[key]);
@@ -69,6 +74,19 @@ alfred.Method _methodParser(String httpVerb) {
   }
 }
 
+int _setStatusCode({
+  required String httpVerb,
+  int? responseStatus,
+}) {
+  if (responseStatus == null) {
+    if (httpVerb == "post") {
+      return 201;
+    }
+    return 200;
+  }
+  return responseStatus;
+}
+
 /// It applies the middleware list related to the controller, that is passed to each route inside it
 Future _applyMiddleware(
   List<HttpMiddleware>? middlewares,
@@ -79,7 +97,7 @@ Future _applyMiddleware(
       final responseOrNull = await middleware.handle(request);
       return responseOrNull.fold(
         (l) => throw alfred.AlfredException(
-          l.status,
+          l.status ?? 500,
           l.body,
         ),
         (r) => null,

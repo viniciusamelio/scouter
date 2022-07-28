@@ -21,12 +21,12 @@ class HttpRequest {
 
 class HttpResponse {
   HttpResponse({
-    required this.status,
+    this.status,
     required this.body,
     this.headers = const {},
   });
 
-  final int status;
+  final int? status;
   final Map<String, dynamic> body;
   final Map<String, dynamic> headers;
 }

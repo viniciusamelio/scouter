@@ -26,7 +26,6 @@ class FeatureController extends RestController {
       body: {
         "id": request.params!["id"],
       },
-      status: 200,
     );
   }
 
@@ -37,7 +36,6 @@ class FeatureController extends RestController {
       body: {
         "teste": teste.name,
       },
-      status: 201,
     );
   }
 }
@@ -83,6 +81,8 @@ class ProfileController extends RestController {
     );
   }
 }
+
+// TODO: Implementar middlewares a nível de módulo
 
 class TestModule implements Module {
   @override

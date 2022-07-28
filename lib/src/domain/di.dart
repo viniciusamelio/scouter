@@ -1,6 +1,6 @@
-typedef Builder<T extends Object> = void Function(T instance);
+typedef Builder<T> = T Function();
 
-abstract class Injection<T extends Object> {
+abstract class Injection<T> {
   const Injection(
     this.builder, {
     this.name,
@@ -15,8 +15,7 @@ abstract class InjectionManager<Injector> {
   });
   final Injector injector;
 
-  void registerSingleton<T>(Injection instance);
-  void registerFactory<T>(Injection instance);
+  void register<T>(Injection<T> instance);
 
   T get<T>([String? name]);
 }

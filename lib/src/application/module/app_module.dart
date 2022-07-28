@@ -15,7 +15,7 @@ class AppModule implements Module {
   });
 
   @override
-  final List<Injection<Object>> exports;
+  final List<Injection> exports;
 
   @override
   final List<Module> imports;

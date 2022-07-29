@@ -81,17 +81,18 @@ class ProfileController extends RestController {
 }
 
 class Resposta {
+  List<Teste> respostas = [
+    Teste(),
+    Teste(),
+    Teste(),
+  ];
   String message = "Salvo com sucesso!";
   int savedId = 70;
-  Teste resposta = Teste();
   int httpStatus = 206;
 }
 
 class Teste {
   String data = "ok";
-  List list = ["1", "2"];
-
-  Map<String, dynamic> toJson() => {"data": "xqdl"};
 }
 // TODO: Implementar middlewares a nível de módulo
 

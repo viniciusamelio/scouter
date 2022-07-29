@@ -42,12 +42,12 @@ abstract class ResponseReflections {
       );
     }
 
-    ref.type.declarations.forEach((_, member) {
+    ref.type.declarations.forEach((symbol, member) {
       if (_isMethodOrConstructor(member)) {
         return;
       }
 
-      var value = ref.getField(_).reflectee;
+      var value = ref.getField(symbol).reflectee;
       value = _handleValueParsing(value);
 
       final key = member.simpleName.toString().split('"')[1];

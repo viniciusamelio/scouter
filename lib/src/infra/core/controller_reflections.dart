@@ -20,7 +20,7 @@ abstract class ControllerReflections {
     }
     final controllerAnnotation = clazzMetas.first;
 
-    ref.type.declarations.forEach((_, member) {
+    ref.type.declarations.forEach((symbol, member) {
       if (!member.owner!.simpleName.toString().contains("Controller")) {
         throw Exception(
             "Your controller should contain 'Controller' in its class declaration");

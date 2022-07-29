@@ -8,5 +8,5 @@ mixin Injectable {
     _injector.register<T>(injection);
   }
 
-  T get<T>([String? name]) => _injector.get<T>(name);
+  T injected<T>([String? name]) => _injector.get<T>(name);
 }

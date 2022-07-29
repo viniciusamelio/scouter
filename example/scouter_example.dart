@@ -10,7 +10,7 @@ import 'package:scouter/src/domain/route.dart';
 // import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/start.dart';
 
-@HttpController(name: "main")
+@HttpController()
 class FeatureController extends RestController {
   FeatureController() {
     inject<FakeProvider>(
@@ -31,7 +31,7 @@ class FeatureController extends RestController {
 
   @Post("/save")
   HttpResponse save(HttpRequest request) {
-    final FakeProvider teste = get();
+    final FakeProvider teste = injected();
     return HttpResponse(
       body: {
         "teste": teste.name,
@@ -92,6 +92,8 @@ class Resposta {
 
 class Teste {
   String data = "ok";
+
+  void call() {}
 }
 // TODO: Implementar middlewares a nível de módulo
 

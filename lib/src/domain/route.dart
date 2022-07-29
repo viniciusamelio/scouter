@@ -43,5 +43,5 @@ class HttpRoute {
   final RouteHandler handler;
   final String verb;
   String? preffix;
-  final List<HttpMiddleware>? middlewares;
+  List<HttpMiddleware>? middlewares;
 }

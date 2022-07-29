@@ -1,5 +1,6 @@
 import 'package:alfred/alfred.dart';
 import 'package:scouter/src/application/module/app_module.dart';
+import 'package:scouter/src/domain/middleware.dart';
 import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/parser/alfred_route_parser.dart';
 
@@ -14,7 +15,11 @@ Future<void> runServer(
   app.typeHandlers.add(TypeHandler<HttpResponse>(((_, __, ___) => null)));
 
   await _setupAppModule(appModule, app);
-  await _setupChildModules(appModule.modules, app);
+  await _setupChildModules(
+    appModule.modules,
+    app,
+    appModule.middlewares,
+  );
   app.listen(
     port ?? 8080,
     host ?? "0.0.0.0",
@@ -27,6 +32,10 @@ Future<void> _setupAppModule(
 ) async {
   for (final controller in appModule.controllers) {
     for (var route in ControllerReflections.getControllerRoutes(controller)) {
+      route.middlewares = [
+        ...route.middlewares!.toList(),
+        ...appModule.middlewares,
+      ];
       app.routes.add(
         AlfredRouteParser.parse(route),
       );
@@ -37,10 +46,16 @@ Future<void> _setupAppModule(
 Future<void> _setupChildModules(
   List<Module> modules,
   Alfred app,
+  List<HttpMiddleware> appMiddlewares,
 ) async {
   for (final module in modules) {
     for (var controller in module.controllers) {
       for (var route in ControllerReflections.getControllerRoutes(controller)) {
+        route.middlewares = [
+          ...route.middlewares!.toList(),
+          ...module.middlewares,
+          ...appMiddlewares,
+        ];
         if (module.preffix.isNotEmpty) {
           route.preffix = "/${module.preffix.replaceAll(
             '/',

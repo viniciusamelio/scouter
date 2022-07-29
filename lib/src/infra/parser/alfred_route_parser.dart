@@ -98,7 +98,7 @@ Future _applyMiddleware(
   if (middlewares != null) {
     for (var middleware in middlewares) {
       final responseOrNull = await middleware.handle(request);
-      return responseOrNull.fold(
+      responseOrNull.fold(
         (l) => throw alfred.AlfredException(
           l.status ?? 500,
           l.body,

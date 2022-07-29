@@ -56,6 +56,21 @@ class ExampleMidleware implements HttpMiddleware {
   }
 }
 
+class LoggerMiddleware implements HttpMiddleware {
+  @override
+  Future<Either<HttpResponse, void>> handle(HttpRequest request) async {
+    if (request.path.contains("/private")) {
+      return Left(HttpResponse(
+        body: {
+          "request": request.body,
+        },
+        status: 500,
+      ));
+    }
+    return Right(null);
+  }
+}
+
 @HttpController(
   middlewares: [
     ExampleMidleware(),
@@ -77,6 +92,11 @@ class ProfileController extends RestController {
   getById(HttpRequest request) {
     return Resposta();
   }
+
+  @Get("/")
+  get(HttpRequest request) {
+    return Resposta();
+  }
 }
 
 class Resposta {
@@ -95,7 +115,6 @@ class Teste {
 
   void call() {}
 }
-// TODO: Implementar middlewares a nível de módulo
 
 class TestModule extends Module {
   TestModule({super.preffix = "teste"});
@@ -124,6 +143,10 @@ void main() async {
     AppModule(
       modules: [
         TestModule(),
+      ],
+      middlewares: [
+        ExampleMidleware(),
+        LoggerMiddleware(),
       ],
       controllers: [
         FeatureController(),

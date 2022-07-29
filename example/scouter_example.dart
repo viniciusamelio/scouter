@@ -7,6 +7,7 @@ import 'package:scouter/src/domain/http_verbs.dart';
 import 'package:scouter/src/domain/middleware.dart';
 import 'package:scouter/src/domain/module.dart';
 import 'package:scouter/src/domain/route.dart';
+import 'package:scouter/src/infra/core/response_reflections.dart';
 // import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/start.dart';
 
@@ -75,17 +76,23 @@ class GameController extends RestController {
 class ProfileController extends RestController {
   @Get("/private")
   getById(HttpRequest request) {
-    return Resposta(202);
+    return Resposta();
   }
 }
 
 class Resposta {
-  Resposta([this.status]);
   String message = "Salvo com sucesso!";
   int savedId = 70;
-  int? status;
+  Teste resposta = Teste();
+  int httpStatus = 206;
 }
 
+class Teste {
+  String data = "ok";
+  List list = ["1", "2"];
+
+  Map<String, dynamic> toJson() => {"data": "xqdl"};
+}
 // TODO: Implementar middlewares a nível de módulo
 
 class TestModule extends Module {

@@ -1,5 +1,5 @@
 import 'dart:mirrors';
-
+import 'package:fpdart/fpdart.dart';
 import 'package:scouter/src/domain/route.dart';
 
 abstract class MappedObject {
@@ -28,32 +28,28 @@ abstract class ResponseReflections {
 
     final ref = reflect(object);
 
-    if (ref.type.reflectedType == HttpResponse) {
-      return object;
-    } else if (ref.type.declarations.containsKey(#toMap)) {
-      final Map<String, dynamic> responseBody =
-          object.toMap() as Map<String, dynamic>;
+    final isParsingNeeded = _checkIfParsingIsNeeded(
+      ref: ref,
+      object: object,
+    );
 
-      return _getResponse(responseBody);
-    } else if (ref.type.declarations.containsKey(#toJson)) {
-      final Map<String, dynamic> responseBody =
-          object.toJson() as Map<String, dynamic>;
-
-      return _getResponse(responseBody);
+    if (isParsingNeeded.isRight()) {
+      return isParsingNeeded.fold(
+        (l) => HttpResponse(
+          body: {},
+        ),
+        (r) => r,
+      );
     }
+
     ref.type.declarations.forEach((_, member) {
-      if (member.owner!.simpleName == member.simpleName ||
-          (member is MethodMirror)) {
+      if (_isMethodOrConstructor(member)) {
         return;
       }
 
       var value = ref.getField(_).reflectee;
+      value = _handleValueParsing(value);
 
-      if (value is List) {
-        value = _parseNonNativeTypeList(value);
-      } else if (!nativeAcceptedPropTypes.containsKey(value.runtimeType)) {
-        value = ResponseReflections.getResponseFromObject(value).body;
-      }
       final key = member.simpleName.toString().split('"')[1];
       responseBody[key] = value;
     });
@@ -76,5 +72,43 @@ abstract class ResponseReflections {
       }
       return e;
     }).toList();
+  }
+
+  static bool _isMethodOrConstructor(DeclarationMirror member) {
+    if (member.owner!.simpleName == member.simpleName ||
+        (member is MethodMirror)) {
+      return true;
+    }
+    return false;
+  }
+
+  static _handleValueParsing(dynamic value) {
+    if (value is List) {
+      value = _parseNonNativeTypeList(value);
+    } else if (!nativeAcceptedPropTypes.containsKey(value.runtimeType)) {
+      value = ResponseReflections.getResponseFromObject(value).body;
+    }
+    return value;
+  }
+
+  static Either<void, HttpResponse> _checkIfParsingIsNeeded({
+    required InstanceMirror ref,
+    required dynamic object,
+  }) {
+    if (ref.type.reflectedType == HttpResponse) {
+      return Right(object);
+    } else if (ref.type.declarations.containsKey(#toMap)) {
+      final Map<String, dynamic> responseBody =
+          object.toMap() as Map<String, dynamic>;
+
+      return Right(_getResponse(responseBody));
+    } else if (ref.type.declarations.containsKey(#toJson)) {
+      final Map<String, dynamic> responseBody =
+          object.toJson() as Map<String, dynamic>;
+
+      return Right(_getResponse(responseBody));
+    }
+
+    return Left(null);
   }
 }

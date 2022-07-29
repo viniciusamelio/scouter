@@ -7,7 +7,6 @@ import 'package:scouter/src/domain/http_verbs.dart';
 import 'package:scouter/src/domain/middleware.dart';
 import 'package:scouter/src/domain/module.dart';
 import 'package:scouter/src/domain/route.dart';
-import 'package:scouter/src/infra/core/response_reflections.dart';
 // import 'package:scouter/src/infra/core/controller_reflections.dart';
 import 'package:scouter/src/infra/start.dart';
 

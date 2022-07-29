@@ -74,17 +74,23 @@ class GameController extends RestController {
 @HttpController()
 class ProfileController extends RestController {
   @Get("/private")
-  HttpResponse getById(HttpRequest request) {
-    return HttpResponse(
-      body: {"profile": "Private Mode"},
-      status: 200,
-    );
+  getById(HttpRequest request) {
+    return Resposta(202);
   }
+}
+
+class Resposta {
+  Resposta([this.status]);
+  String message = "Salvo com sucesso!";
+  int savedId = 70;
+  int? status;
 }
 
 // TODO: Implementar middlewares a nível de módulo
 
-class TestModule implements Module {
+class TestModule extends Module {
+  TestModule({super.preffix = "teste"});
+
   @override
   List<RestController> get controllers => [
         GameController(),
@@ -93,9 +99,6 @@ class TestModule implements Module {
 
   @override
   List<HttpMiddleware> get middlewares => [];
-
-  @override
-  String get preffix => "test";
 }
 
 void main() async {

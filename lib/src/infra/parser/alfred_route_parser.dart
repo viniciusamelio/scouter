@@ -1,6 +1,7 @@
 import 'package:alfred/alfred.dart' as alfred;
 import 'package:scouter/src/domain/middleware.dart';
 import 'package:scouter/src/domain/route.dart';
+import 'package:scouter/src/infra/core/response_reflections.dart';
 
 import 'alfred_headers_parser.dart';
 
@@ -35,7 +36,9 @@ _handlerParser(
     params: req.params,
     path: req.route,
   );
-  final response = await handler(request);
+  final response = ResponseReflections.getResponseFromObject(
+    await handler(request),
+  );
   res.statusCode = _setStatusCode(
     httpVerb: httpVerb,
     responseStatus: response.status,

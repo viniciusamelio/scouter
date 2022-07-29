@@ -19,9 +19,11 @@ abstract class ResponseReflections {
       final key = member.simpleName.toString().split('"')[1];
       responseBody[key] = value;
     });
-
+    final dynamic status = responseBody["status"];
+    responseBody.remove("status");
     return HttpResponse(
       body: responseBody,
+      status: status,
     );
   }
 }

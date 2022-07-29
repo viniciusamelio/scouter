@@ -1,6 +1,6 @@
 import 'package:scouter/src/domain/middleware.dart';
 
-typedef RouteHandler = Future<HttpResponse> Function(
+typedef RouteHandler = Future<dynamic> Function(
   HttpRequest request,
 );
 

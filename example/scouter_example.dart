@@ -118,15 +118,6 @@ class TestModule extends Module {
 }
 
 void main() async {
-  // final routes = ControllerReflections.getControllerRoutes(
-  //   FeatureController(),
-  // );
-
-  // for (var route in routes) {
-  //   print("Path: ${route.path}");
-  //   print("Method: ${route.verb}");
-  // }
-
   runServer(
     AppModule(
       modules: [

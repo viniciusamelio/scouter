@@ -1,7 +1,7 @@
 import 'package:alfred/alfred.dart';
 import 'package:scouter/src/application/module/app_module.dart';
 import 'package:scouter/src/domain/middleware.dart';
-import 'package:scouter/src/infra/core/controller_reflections.dart';
+import 'package:scouter/src/application/reflections/controller_reflections.dart';
 import 'package:scouter/src/infra/parser/alfred_route_parser.dart';
 
 import '../domain/module.dart';

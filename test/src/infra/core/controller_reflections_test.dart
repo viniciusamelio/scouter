@@ -2,7 +2,8 @@ import 'package:scouter/src/application/controller/rest_controller.dart';
 import 'package:scouter/src/domain/http_controller.dart';
 import 'package:scouter/src/domain/http_verbs.dart';
 import 'package:scouter/src/domain/route.dart';
-import 'package:scouter/src/infra/core/controller_reflections.dart';
+import 'package:scouter/src/application/reflections/controller_reflections.dart';
+
 import 'package:test/test.dart';
 
 @HttpController()

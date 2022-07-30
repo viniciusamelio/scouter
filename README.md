@@ -123,6 +123,78 @@ class ProfileController extends RestController {
   }
 }
 ```
+### Response parsing
+Routes can have a return type of HttpResponse itself, but it also supports a Map or even a CustomClass. The best part of using a custom class is
+that you will not need to parse it to a Map, Json or whatever. For example, if you try to return the following object from a route:
+```dart
+class ProfileController  {
+  final String id = 1;
+  final String name = "Anything";
+  final List<String> tags = ["cool guy", "developer"];
+  final String url = "https://pub.dev";
+}
+```
+Scouter will parse it to the following format:
+```json
+{
+  "id": 1,
+  "name" : "Anything",
+  "url": "https://pub.dev",
+  "tags" : [
+    "cool guy",
+    "developer",
+  ]
+}
+```
+This method will not parse any method that your class may contain.<br>
+Also, if you prefer, you can return a class which contains one of the following methods: toJson() or toMap(). Both should return a Map of String,dynamic.
+Just like this:
+
+```dart
+class ProfileController  {
+  final String id = 1;
+  final String name = "Anything";
+  final List<String> tags = ["cool guy", "developer"];
+  final String url = "https://pub.dev";
+
+  Map<String,dynamic> toMap() => {
+    "name" : name,
+    "tags" : tags,
+    "url" : url,
+  };
+}
+```
+
+As you can see, you can ommit and apply whatever logic you want to compose your map, it is important that in the typing, the subtypes of entry, for the parsed map, to be declared, it may always be String and dynamic. <br>
+
+By default, status 200 will be applied to response, but, if you are returning an object that will be parsed, just like above, you can set it through httpStatus property, which needs to be an int. It will be applied to the final response. Such as:
+
+```dart
+class ProfileController  {
+  final String id = 1;
+  final String name = "Anything";
+  final List<String> tags = ["cool guy", "developer"];
+  final String url = "https://pub.dev";
+  final int httpStatus = 201;
+}
+```
+
+It is important to notice that: 
+- variables from custom objects will be parsed exactly how it is declared, soon, a way to customize the desired key will be introduced, but for now, if you declare something like this:
+  ```dart
+  class ProfileController  {
+    final String idUser = 5;
+  }
+  ```
+  It will be parsed to this:
+
+  ```json
+  {
+    "idUser" : 5
+  }
+  ```
+- if you are using the toMap() or toJson() methods, no processing will be made in your instance, instead, this methods will be called, just the way you implemented it
+- no methods will be parsed, it includes getters.
 
 You <b> Must </b> start the route with "/", otherwise an exception will be thrown when trying to run the server; <br>
 You <b> Must </b> return something from your route, otherwise it will cause a timeout exception

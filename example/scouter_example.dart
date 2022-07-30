@@ -1,14 +1,4 @@
-import 'package:fpdart/fpdart.dart';
-import 'package:scouter/src/application/controller/rest_controller.dart';
-import 'package:scouter/src/application/di/injections.dart';
-import 'package:scouter/src/application/module/app_module.dart';
-import 'package:scouter/src/domain/http_controller.dart';
-import 'package:scouter/src/domain/http_verbs.dart';
-import 'package:scouter/src/domain/middleware.dart';
-import 'package:scouter/src/domain/module.dart';
-import 'package:scouter/src/domain/route.dart';
-// import 'package:scouter/src/infra/core/controller_reflections.dart';
-import 'package:scouter/src/infra/start.dart';
+import "package:scouter/scouter.dart";
 
 @HttpController()
 class FeatureController extends RestController {

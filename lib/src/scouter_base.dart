@@ -1,6 +1,4 @@
-// TODO: Put public facing types in this file.
-
-/// Checks if you are awesome. Spoiler: you are.
-class Awesome {
-  bool get isAwesome => true;
-}
+export "application/application.dart";
+export "domain/domain.dart";
+export "infra/infra.dart";
+export "package:fpdart/fpdart.dart";

@@ -127,7 +127,7 @@ class ProfileController extends RestController {
 Routes can have a return type of HttpResponse itself, but it also supports a Map or even a CustomClass. The best part of using a custom class is
 that you will not need to parse it to a Map, Json or whatever. For example, if you try to return the following object from a route:
 ```dart
-class ProfileController  {
+class Profile  {
   final String id = 1;
   final String name = "Anything";
   final List<String> tags = ["cool guy", "developer"];
@@ -151,7 +151,7 @@ Also, if you prefer, you can return a class which contains one of the following 
 Just like this:
 
 ```dart
-class ProfileController  {
+class Profile  {
   final String id = 1;
   final String name = "Anything";
   final List<String> tags = ["cool guy", "developer"];
@@ -170,7 +170,7 @@ As you can see, you can ommit and apply whatever logic you want to compose your 
 By default, status 200 will be applied to response, but, if you are returning an object that will be parsed, just like above, you can set it through httpStatus property, which needs to be an int. It will be applied to the final response. Such as:
 
 ```dart
-class ProfileController  {
+class Profile  {
   final String id = 1;
   final String name = "Anything";
   final List<String> tags = ["cool guy", "developer"];
@@ -182,7 +182,7 @@ class ProfileController  {
 It is important to notice that: 
 - variables from custom objects will be parsed exactly how it is declared, soon, a way to customize the desired key will be introduced, but for now, if you declare something like this:
   ```dart
-  class ProfileController  {
+  class Profile  {
     final String idUser = 5;
   }
   ```

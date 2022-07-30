@@ -18,7 +18,7 @@ Future<void> runServer(
   await _setupChildModules(
     appModule.modules,
     app,
-    appModule.middlewares,
+    appModule.globalMiddlewares,
   );
   app.listen(
     port ?? 8080,
@@ -52,7 +52,7 @@ Future<void> _setupChildModules(
     for (var controller in module.controllers) {
       for (var route in ControllerReflections.getControllerRoutes(controller)) {
         route.middlewares = [
-          ...route.middlewares!.toList(),
+          ...route.middlewares?.toList() ?? [],
           ...module.middlewares,
           ...appMiddlewares,
         ];

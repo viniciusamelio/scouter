@@ -8,6 +8,7 @@ class AppModule implements Module {
     this.controllers = const [],
     this.modules = const [],
     this.middlewares = const [],
+    this.globalMiddlewares = const [],
   });
 
   @override
@@ -20,4 +21,6 @@ class AppModule implements Module {
 
   @override
   final List<HttpMiddleware> middlewares;
+
+  final List<HttpMiddleware> globalMiddlewares;
 }

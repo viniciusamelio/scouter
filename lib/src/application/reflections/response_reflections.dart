@@ -107,6 +107,11 @@ abstract class ResponseReflections {
           object.toJson() as Map<String, dynamic>;
 
       return Right(_getResponse(responseBody));
+    } else if (object is Map) {
+      final Map<String, dynamic> responseBody = object.map(
+        (key, value) => MapEntry(key.toString(), value),
+      );
+      return Right(_getResponse(responseBody));
     }
 
     return Left(null);

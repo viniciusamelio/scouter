@@ -21,12 +21,10 @@ class FeatureController extends RestController {
   }
 
   @Get("/:id")
-  HttpResponse getById(HttpRequest request) {
-    return HttpResponse(
-      body: {
-        "id": request.params!["id"],
-      },
-    );
+  getById(HttpRequest request) {
+    return {
+      "id": request.params!["id"],
+    };
   }
 
   @Post("/save")

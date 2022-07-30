@@ -65,8 +65,8 @@ abstract class ResponseReflections {
     );
   }
 
-  static List _parseNonNativeTypeList(List value) {
-    return value.map((e) {
+  static List<Map<String, dynamic>> _parseNonNativeTypeList(List value) {
+    return value.map<Map<String, dynamic>>((e) {
       if (!nativeAcceptedPropTypes.containsKey(e.runtimeType)) {
         return ResponseReflections.getResponseFromObject(e).body;
       }

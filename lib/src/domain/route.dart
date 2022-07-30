@@ -38,7 +38,10 @@ class HttpRoute {
     this.verb = "get",
     this.middlewares,
     this.preffix,
-  });
+  }) : assert(
+          path.isNotEmpty && path[0] == "/",
+          "Route path should begins with '/'",
+        );
   final String path;
   final RouteHandler handler;
   final String verb;

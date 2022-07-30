@@ -6,33 +6,6 @@ import 'package:scouter/src/application/reflections/controller_reflections.dart'
 
 import 'package:test/test.dart';
 
-@HttpController()
-class TestController extends RestController {
-  @Get("/:id")
-  Future<HttpResponse> getById(HttpRequest request) async {
-    return HttpResponse(
-      status: 200,
-      body: {
-        "tests": [],
-      },
-    );
-  }
-
-  @Post("/")
-  Future<HttpResponse> save(HttpRequest request) async {
-    final data = request.body;
-    return HttpResponse(
-      status: 201,
-      body: data,
-    );
-  }
-}
-
-class WithoutAnnotationController extends RestController {}
-
-@HttpController()
-class Wrong extends RestController {}
-
 void main() {
   test(
     'Should extract routes successfully',
@@ -70,4 +43,67 @@ void main() {
       ),
     );
   });
+
+  test("Should throw when trying to declare a route which is empty", () async {
+    final controller = WrongRouteDeclarationController();
+
+    expect(
+      () => ControllerReflections.getControllerRoutes(controller),
+      throwsA(anything),
+    );
+  });
+
+  test(
+      "Should throw when trying to declare a route which does not begins with '/'",
+      () async {
+    final controller = WrongRouteDeclarationController2();
+
+    expect(
+      () => ControllerReflections.getControllerRoutes(controller),
+      throwsA(anything),
+    );
+  });
+}
+
+@HttpController()
+class TestController extends RestController {
+  @Get("/:id")
+  Future<HttpResponse> getById(HttpRequest request) async {
+    return HttpResponse(
+      status: 200,
+      body: {
+        "tests": [],
+      },
+    );
+  }
+
+  @Post("/")
+  Future<HttpResponse> save(HttpRequest request) async {
+    final data = request.body;
+    return HttpResponse(
+      status: 201,
+      body: data,
+    );
+  }
+}
+
+class WithoutAnnotationController extends RestController {}
+
+@HttpController()
+class Wrong extends RestController {}
+
+@HttpController()
+class WrongRouteDeclarationController extends RestController {
+  @Get("")
+  getById(HttpRequest request) async {
+    return {};
+  }
+}
+
+@HttpController()
+class WrongRouteDeclarationController2 extends RestController {
+  @Get("wrong")
+  getById(HttpRequest request) async {
+    return {};
+  }
 }

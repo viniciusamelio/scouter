@@ -35,6 +35,7 @@ Future<void> _setupAppModule(
       route.middlewares = [
         ...route.middlewares!.toList(),
         ...appModule.middlewares,
+        ...appModule.globalMiddlewares,
       ];
       app.routes.add(
         AlfredRouteParser.parse(route),

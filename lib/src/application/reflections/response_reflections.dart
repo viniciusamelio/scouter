@@ -57,12 +57,21 @@ abstract class ResponseReflections {
   }
 
   static HttpResponse _getResponse(Map<String, dynamic> responseBody) {
-    final dynamic status = responseBody["httpStatus"] ?? 200;
+    dynamic status = responseBody["httpStatus"] ?? 200;
+    status = _fixStatusIfNeeded(status);
     responseBody.remove("httpStatus");
     return HttpResponse(
       body: responseBody,
       status: status,
     );
+  }
+
+  static _fixStatusIfNeeded(dynamic status) {
+    if (status is! int) {
+      status = int.tryParse(status.toString());
+      status ??= 200;
+    }
+    return status;
   }
 
   static List<Map<String, dynamic>> _parseNonNativeTypeList(List value) {

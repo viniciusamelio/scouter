@@ -95,7 +95,7 @@ class Resposta {
   ];
   String message = "Salvo com sucesso!";
   int savedId = 70;
-  int httpStatus = 206;
+  String httpStatus = "203";
 }
 
 class Teste {

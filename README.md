@@ -1,4 +1,12 @@
-Scouter is a package which was made following the goal to provide a NestJS-like experience to Dart Developers that want to develop Rest APIS
+<table>
+  <td width="175px">
+    <img src="assets/logo.png" height="150px"/> <br>
+  </td>
+  <td>
+    Scouter is a package which was made following the goal to provide a NestJS-like experience to Dart Developers that want to develop Rest APIS
+  </td>
+</table>
+
 
 ## Features
 

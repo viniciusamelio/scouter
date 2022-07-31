@@ -1,3 +1,7 @@
+## 1.0.3
+
+- Fixed: Adding const keyword to HttpVerbs annotations
+
 ## 1.0.2
 
 - Fixed: Custom Object inside Maps responses were not being parsed

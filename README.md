@@ -131,6 +131,16 @@ class ProfileController extends RestController {
   }
 }
 ```
+
+You can declare dynamic routes this way:
+
+```dart
+  @Get("/:id")
+  getById(HttpRequest request) {
+    final id = request.params!["id"];
+    ...
+  }
+```
 ### Response parsing
 Routes can have a return type of HttpResponse itself, but it also supports a Map or even a CustomClass. The best part of using a custom class is
 that you will not need to parse it to a Map, Json or whatever. For example, if you try to return the following object from a route:

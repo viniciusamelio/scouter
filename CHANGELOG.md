@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Fixed: Custom Object inside Maps responses were not being parsed
+
 ## 1.0.1
 
 - Fixed: Global middlewares were not being applied to AppModule's routes

@@ -83,7 +83,9 @@ class ProfileController extends RestController {
 
   @Get("/")
   get(HttpRequest request) {
-    return Resposta();
+    return {
+      "data": Resposta(),
+    };
   }
 }
 

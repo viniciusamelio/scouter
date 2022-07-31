@@ -118,7 +118,12 @@ abstract class ResponseReflections {
       return Right(_getResponse(responseBody));
     } else if (object is Map) {
       final Map<String, dynamic> responseBody = object.map(
-        (key, value) => MapEntry(key.toString(), value),
+        (key, value) {
+          if (!nativeAcceptedPropTypes.containsKey(value.runtimeType)) {
+            value = ResponseReflections.getResponseFromObject(value).body;
+          }
+          return MapEntry(key.toString(), value);
+        },
       );
       return Right(_getResponse(responseBody));
     }

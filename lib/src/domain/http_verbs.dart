@@ -25,7 +25,7 @@ class Post implements HttpVerb {
 }
 
 class Put implements HttpVerb {
-  Put(this.route);
+  const Put(this.route);
   @override
   final String route;
 
@@ -34,7 +34,7 @@ class Put implements HttpVerb {
 }
 
 class Patch implements HttpVerb {
-  Patch(this.route);
+  const Patch(this.route);
   @override
   final String route;
 
@@ -43,7 +43,7 @@ class Patch implements HttpVerb {
 }
 
 class Delete implements HttpVerb {
-  Delete(this.route);
+  const Delete(this.route);
   @override
   final String route;
 
@@ -52,7 +52,7 @@ class Delete implements HttpVerb {
 }
 
 class Options implements HttpVerb {
-  Options(this.route);
+  const Options(this.route);
   @override
   final String route;
 
@@ -61,7 +61,7 @@ class Options implements HttpVerb {
 }
 
 class Head implements HttpVerb {
-  Head(this.route);
+  const Head(this.route);
   @override
   final String route;
 

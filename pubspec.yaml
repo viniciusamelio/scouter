@@ -1,6 +1,6 @@
 name: scouter
-description: A NestJS based http wrapper, to handle apis development following its code style
-version: 1.0.3
+description: A NestJS inspired HTTP wrapper, to handle apis development following its code style
+version: 1.0.4
 repository: https://github.com/viniciusamelio/scouter
 # homepage: https://www.example.com
 

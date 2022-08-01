@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Fixed: Modules allowing preffix to start with '/'
+
 ## 1.0.3
 
 - Fixed: Adding const keyword to HttpVerbs annotations

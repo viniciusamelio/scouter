@@ -13,7 +13,7 @@ class HttpRequest {
     this.middlewares = const [],
   });
   final String path;
-  final dynamic headers;
+  final Map<String, dynamic> headers;
   final dynamic body;
   final Map<String, dynamic>? params;
   final List<HttpMiddleware> middlewares;

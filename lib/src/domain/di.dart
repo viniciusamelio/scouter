@@ -1,5 +1,6 @@
 typedef Builder<T> = T Function();
 
+/// Injection is a wrapper of an instance to be injected
 abstract class Injection<T extends Object> {
   Injection(
     this.builder, {
@@ -10,6 +11,7 @@ abstract class Injection<T extends Object> {
   Type type = T.runtimeType;
 }
 
+/// Injection Manager is an interface to handle container registration
 abstract class InjectionManager<Injector> {
   InjectionManager({
     required this.injector,

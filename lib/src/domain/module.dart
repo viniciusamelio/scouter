@@ -2,6 +2,18 @@ import 'package:scouter/src/domain/middleware.dart';
 
 import '../application/controller/rest_controller.dart';
 
+/// A Module represents a context of your software. Each Module have its own controllers and middlewares.<br>
+/// A Module needs to be extended and its preffix property will declare a part of your routes.
+///
+/// ```dart
+///class AnyModule extends Module{
+///  AnyModule({super.preffix = "any"})
+///
+/// ...
+///}
+/// ```
+///
+/// The example above will make every route inside any controller of it follow this format: /any/controller/route
 abstract class Module {
   Module({
     required this.preffix,

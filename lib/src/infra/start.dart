@@ -6,6 +6,7 @@ import 'package:scouter/src/infra/parser/alfred_route_parser.dart';
 
 import '../domain/module.dart';
 
+/// Starts a server with an AppModule. Default port and host are: 8080 and "0.0.0.0"
 Future<void> runServer(
   AppModule appModule, {
   String? host,

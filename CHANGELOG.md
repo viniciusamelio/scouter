@@ -1,6 +1,7 @@
 ## 1.0.4
 
 - Fixed: Modules allowing preffix to start with '/'
+- Doc: Providing dart documentation to public exported classes
 
 ## 1.0.3
 

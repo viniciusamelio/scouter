@@ -1,5 +1,6 @@
 import 'package:scouter/src/domain/middleware.dart';
 
+/// HttpController is an Annotation that declares a Controller, that <b>must</b> also extends a RestController
 class HttpController {
   const HttpController({
     this.name = "",

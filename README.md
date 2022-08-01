@@ -84,7 +84,7 @@ You also must extends RestController class. By default RestController will provi
 ```dart
 @HttpController()
 class ProfileController extends RestController {
-  @Get("/private")
+  @Get("/:id")
   getById(HttpRequest request) {
     return ResponseSample();
   }
@@ -126,7 +126,7 @@ class ProfileController extends RestController {
   }
 
   @Post("/")
-  get(HttpRequest request) {
+  save(HttpRequest request) {
     ...
   }
 }

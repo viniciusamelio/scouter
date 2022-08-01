@@ -329,3 +329,38 @@ class MyOwnClass with Injectable{
 
 Through this, you will can use the inject and injected functions.
 
+
+
+## Compile & Deploy
+So, because of Scouter depends on dart:mirrors, it cannot be compiled as an AOT, because the lack of support to Runtime. So, you should compile it as a Kernel Module:
+
+```dart
+dart compile kernel bin/your_app.dart
+```
+
+It will result in a ".dill" file, which you can run through:
+
+```dart
+dart run bin/your_app.dill
+```
+
+For deploying it is recommended to use a docker container, which, unfortunately, will need to have Dart installed on it. You can use something like this  .Dockerfile
+
+```Dockerfile
+FROM dart:stable AS build
+
+WORKDIR /app
+
+COPY pubspec.* ./
+RUN dart pub get
+
+COPY . 
+
+RUN dart pub get --offline
+RUN dart compile kernel bin/server.dart -o bin/server
+
+Expose 3000
+CMD ["dart", "run", "bin/server"]
+```
+
+We are aware that this is not the best experience for deploying purposes, specially when talking about the container size due to the need of Dart. Soon We'll be trying to provide a better experience.

@@ -1,3 +1,7 @@
+## 1.0.4+1
+
+- Doc: Deploy and build info
+
 ## 1.0.4
 
 - Fixed: Modules allowing preffix to start with '/'

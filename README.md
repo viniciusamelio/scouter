@@ -146,7 +146,7 @@ Routes can have a return type of HttpResponse itself, but it also supports a Map
 that you will not need to parse it to a Map, Json or whatever. For example, if you try to return the following object from a route:
 ```dart
 class Profile  {
-  final String id = 1;
+  final int id = 1;
   final String name = "Anything";
   final List<String> tags = ["cool guy", "developer"];
   final String url = "https://pub.dev";

@@ -170,7 +170,7 @@ Just like this:
 
 ```dart
 class Profile  {
-  final String id = 1;
+  final int id = 1;
   final String name = "Anything";
   final List<String> tags = ["cool guy", "developer"];
   final String url = "https://pub.dev";
@@ -189,7 +189,7 @@ By default, status 200 will be applied to response, but, if you are returning an
 
 ```dart
 class Profile  {
-  final String id = 1;
+  final int id = 1;
   final String name = "Anything";
   final List<String> tags = ["cool guy", "developer"];
   final String url = "https://pub.dev";
@@ -201,7 +201,7 @@ It is important to notice that:
 - variables from custom objects will be parsed exactly how it is declared, soon, a way to customize the desired key will be introduced, but for now, if you declare something like this:
   ```dart
   class Profile  {
-    final String idUser = 5;
+    final int idUser = 5;
   }
   ```
   It will be parsed to this:

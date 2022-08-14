@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:mirrors';
 
 import '../../domain/http_controller.dart';
@@ -31,7 +32,24 @@ abstract class ControllerReflections {
           .map<HttpVerb>((meta) => meta.reflectee as HttpVerb)
           .toList();
 
-      for (var annotation in httpVerbAnnotations) {
+      for (var i = 0; i < httpVerbAnnotations.length; i++) {
+        final annotation = httpVerbAnnotations[i];
+        final List<ParameterMirror> parameters = (member as dynamic).parameters;
+        final List<MapEntry<Type, String>> declaredParams = parameters
+            .map<MapEntry<Type, String>>(
+              (e) => MapEntry(
+                  e.type.reflectedType,
+                  e.simpleName
+                      .toString()
+                      .replaceAll("Symbol(", "")
+                      .replaceAll(")", "")
+                      .replaceAll('"', "")),
+            )
+            .toList();
+        final bool shouldUseHttpRequest = declaredParams
+            .where((element) => element.key == HttpRequest)
+            .isNotEmpty;
+        // print(reflectedMethod.type.typeArguments);
         routes.add(
           HttpRoute(
             verb: annotation.verb,
@@ -41,12 +59,64 @@ abstract class ControllerReflections {
             preffix:
                 "/${controllerAnnotation.reflectee.name != "" ? controllerAnnotation.reflectee.name.toString().toLowerCase() : ref.reflectee.runtimeType.toString().replaceAll('Controller', '').toLowerCase()}",
             handler: (HttpRequest request) async {
-              return ref.getField(member.simpleName).reflectee(request);
+              // Simpler case, when no request param is required and expected handler argument is a Http Request
+              if (shouldUseHttpRequest && request.params!.isEmpty) {
+                return ref.getField(member.simpleName).reflectee(request);
+              }
+
+              List<dynamic> listParams = [];
+              // Add params according to given name, in the following format :name. To handler's arguments with same declared name
+              if (request.params!.isNotEmpty) {
+                listParams.addAll(
+                  urlParams(
+                    request,
+                    declaredParams,
+                  ),
+                );
+              }
+              // TODO: Revisar isso aqui e fazer implementação de DTO como parâmetro do handler
+              // TODO: Adicionar retorno automático com erro 500 para as requests
+              listParams.addAll(
+                declaredParams
+                    .where(
+                  (element) => !request.params!.containsKey(
+                    element.value,
+                  ),
+                )
+                    .map((e) {
+                  if (e.key.toString() == "int") {
+                    return int.parse(request.body[e.value]);
+                  }
+                  return request.body[e.value];
+                }).toList(),
+              );
+              return ref.invoke(member.simpleName, listParams).reflectee;
             },
           ),
         );
       }
     });
     return routes;
+  }
+
+  static List urlParams(
+      HttpRequest request, List<MapEntry<Type, String>> declaredParams) {
+    List<dynamic> listParams = [];
+    final splittedPath =
+        request.path.split(":").map((e) => e.replaceAll("/", "")).toList();
+    if (splittedPath.length > 1) {
+      splittedPath.removeAt(0);
+      for (var pathParam in splittedPath) {
+        if (declaredParams
+            .where((element) =>
+                element.value == pathParam && element.key.toString() == "int")
+            .isNotEmpty) {
+          listParams.add(int.tryParse(request.params![pathParam]) ?? 0);
+          continue;
+        }
+        listParams.add(request.params![pathParam]);
+      }
+    }
+    return listParams;
   }
 }

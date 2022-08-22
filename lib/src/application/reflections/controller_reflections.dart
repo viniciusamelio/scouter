@@ -59,38 +59,65 @@ abstract class ControllerReflections {
             preffix:
                 "/${controllerAnnotation.reflectee.name != "" ? controllerAnnotation.reflectee.name.toString().toLowerCase() : ref.reflectee.runtimeType.toString().replaceAll('Controller', '').toLowerCase()}",
             handler: (HttpRequest request) async {
-              // Simpler case, when no request param is required and expected handler argument is a Http Request
-              if (shouldUseHttpRequest && request.params!.isEmpty) {
-                return ref.getField(member.simpleName).reflectee(request);
-              }
+              try {
+                // Simpler case, when no request param is required and expected handler argument is a Http Request
+                if (shouldUseHttpRequest && request.params!.isEmpty) {
+                  return ref.getField(member.simpleName).reflectee(request);
+                }
 
-              List<dynamic> listParams = [];
-              // Add params according to given name, in the following format :name. To handler's arguments with same declared name
-              if (request.params!.isNotEmpty) {
+                List<dynamic> listParams = [];
+                // Add params according to given name, in the following format :name. To handler's arguments with same declared name
+                if (request.params!.isNotEmpty) {
+                  listParams.addAll(
+                    urlParams(
+                      request,
+                      declaredParams,
+                    ),
+                  );
+                }
+                // TODO: revisar e refatorar os parsers
                 listParams.addAll(
-                  urlParams(
-                    request,
-                    declaredParams,
-                  ),
+                  declaredParams
+                      .where(
+                    // Ensuring parameter is not comming from url
+                    (element) => !request.params!.containsKey(
+                      element.value,
+                    ),
+                  )
+                      .map((e) {
+                    if (e.key.toString() == "int") {
+                      return int.parse(request.body[e.value]);
+                    } else if (e.key.toString() == "String") {
+                      return request.body[e.value];
+                    }
+                    final dtoType = parameters.last.type.reflectedType;
+                    final refflectedDto = reflectClass(dtoType);
+
+                    final isImplementationOfBodyDto =
+                        refflectedDto.isSubtypeOf(reflectType(BodyDto));
+                    if (isImplementationOfBodyDto) {
+                      // Creates an instance from reflected type and invokes fromMap();
+                      return refflectedDto.newInstance(
+                        refflectedDto.owner!.simpleName,
+                        [],
+                      ).invoke(
+                        #fromMap,
+                        [request.body],
+                      ).reflectee;
+                    }
+                    throw "Invalid argument type";
+                  }).toList(),
+                );
+                return ref.invoke(member.simpleName, listParams).reflectee;
+              } catch (e) {
+                return HttpResponse(
+                  body: {
+                    "message": "Something went wrong",
+                    "error": e,
+                  },
+                  status: 500,
                 );
               }
-              // TODO: Revisar isso aqui e fazer implementação de DTO como parâmetro do handler
-              // TODO: Adicionar retorno automático com erro 500 para as requests
-              listParams.addAll(
-                declaredParams
-                    .where(
-                  (element) => !request.params!.containsKey(
-                    element.value,
-                  ),
-                )
-                    .map((e) {
-                  if (e.key.toString() == "int") {
-                    return int.parse(request.body[e.value]);
-                  }
-                  return request.body[e.value];
-                }).toList(),
-              );
-              return ref.invoke(member.simpleName, listParams).reflectee;
             },
           ),
         );
@@ -119,4 +146,8 @@ abstract class ControllerReflections {
     }
     return listParams;
   }
+}
+
+abstract class BodyDto {
+  BodyDto fromMap(Map body);
 }

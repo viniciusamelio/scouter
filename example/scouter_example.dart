@@ -1,4 +1,20 @@
 import "package:scouter/scouter.dart";
+import 'package:scouter/src/application/reflections/controller_reflections.dart';
+
+class XesqueDto extends BodyDto {
+  XesqueDto([
+    this.name,
+    this.xesquedele,
+  ]);
+  String? name;
+  int? xesquedele;
+
+  @override
+  XesqueDto fromMap(Map map) => XesqueDto(
+        map["name"],
+        map["xesquedele"],
+      );
+}
 
 @HttpController()
 class FeatureController extends RestController {
@@ -10,10 +26,12 @@ class FeatureController extends RestController {
     );
   }
 
-  @Get("/:id")
-  getById(HttpRequest request) {
+  @Post("/:id/:uid")
+  getById(int id, String uid, Object name) {
     return {
-      "id": request.params!["id"],
+      "id": id,
+      "uid": uid,
+      "name": name,
     };
   }
 

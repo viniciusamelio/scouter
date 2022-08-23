@@ -1,19 +1,22 @@
 import "package:scouter/scouter.dart";
 import 'package:scouter/src/application/reflections/controller_reflections.dart';
 
-class XesqueDto extends BodyDto {
-  XesqueDto([
-    this.name,
-    this.xesquedele,
-  ]);
-  String? name;
-  int? xesquedele;
+class XesqueDto {
+  XesqueDto({
+    required this.name,
+    required this.xesquedele,
+    required this.data,
+  });
+  final String? name;
+  final int? xesquedele;
+  final Map data;
+}
 
-  @override
-  XesqueDto fromMap(Map map) => XesqueDto(
-        map["name"],
-        map["xesquedele"],
-      );
+class Data {
+  Data({
+    required this.name,
+  });
+  String name;
 }
 
 @HttpController()
@@ -26,17 +29,15 @@ class FeatureController extends RestController {
     );
   }
 
-  @Post("/:id/:uid")
-  getById(int id, String uid, Object name) {
+  @Post("/:id/:uid/")
+  getById(int id, String uid, @Body() XesqueDto dto) {
     return {
-      "id": id,
-      "uid": uid,
-      "name": name,
+      "id": dto,
     };
   }
 
-  @Post("/save")
-  HttpResponse save(HttpRequest request) {
+  @Post("/save/:id")
+  HttpResponse save(int id) {
     final FakeProvider teste = injected();
     return HttpResponse(
       body: {
@@ -158,4 +159,17 @@ void main() async {
 
 class FakeProvider {
   String name = "fakezão";
+}
+
+class MappableDto {
+  MappableDto(
+    this.data,
+    this.uuid,
+  );
+  final String data;
+  final String uuid;
+  static MappableDto fromMap(Map map) => MappableDto(
+        map["data"],
+        map["uuid"],
+      );
 }

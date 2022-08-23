@@ -1,9 +1,9 @@
-import 'dart:developer';
 import 'dart:mirrors';
 
 import '../../domain/http_controller.dart';
 import '../../domain/http_verbs.dart';
 import '../../domain/route.dart';
+import 'request_parameter_reflections.dart';
 
 abstract class ControllerReflections {
   static List<HttpRoute> getControllerRoutes(dynamic clazz) {
@@ -49,7 +49,6 @@ abstract class ControllerReflections {
         final bool shouldUseHttpRequest = declaredParams
             .where((element) => element.key == HttpRequest)
             .isNotEmpty;
-        // print(reflectedMethod.type.typeArguments);
         routes.add(
           HttpRoute(
             verb: annotation.verb,
@@ -67,53 +66,47 @@ abstract class ControllerReflections {
 
                 List<dynamic> listParams = [];
                 // Add params according to given name, in the following format :name. To handler's arguments with same declared name
-                if (request.params!.isNotEmpty) {
+                if (request.params!.isNotEmpty && declaredParams.isNotEmpty) {
                   listParams.addAll(
-                    urlParams(
+                    RequestParameterReflections.handleUrlParams(
                       request,
                       declaredParams,
                     ),
                   );
                 }
-                // TODO: revisar e refatorar os parsers
                 listParams.addAll(
                   declaredParams
                       .where(
-                    // Ensuring parameter is not comming from url
-                    (element) => !request.params!.containsKey(
-                      element.value,
-                    ),
-                  )
-                      .map((e) {
-                    if (e.key.toString() == "int") {
-                      return int.parse(request.body[e.value]);
-                    } else if (e.key.toString() == "String") {
-                      return request.body[e.value];
-                    }
-                    final dtoType = parameters.last.type.reflectedType;
-                    final refflectedDto = reflectClass(dtoType);
-
-                    final isImplementationOfBodyDto =
-                        refflectedDto.isSubtypeOf(reflectType(BodyDto));
-                    if (isImplementationOfBodyDto) {
-                      // Creates an instance from reflected type and invokes fromMap();
-                      return refflectedDto.newInstance(
-                        refflectedDto.owner!.simpleName,
-                        [],
-                      ).invoke(
-                        #fromMap,
-                        [request.body],
-                      ).reflectee;
-                    }
-                    throw "Invalid argument type";
-                  }).toList(),
+                        // Ensuring parameter is not comming from url
+                        (element) =>
+                            !request.params!.containsKey(
+                              element.value,
+                            ) &&
+                            // Ensuring parameter is annotated with @Body()
+                            parameters
+                                .firstWhere(
+                                  (param) =>
+                                      param.type.reflectedType == element.key,
+                                )
+                                .metadata
+                                .where((metadata) => metadata.reflectee is Body)
+                                .isNotEmpty,
+                      )
+                      .map(
+                        (e) => RequestParameterReflections.handleBodyParams(
+                          e,
+                          request,
+                          parameters,
+                        ),
+                      )
+                      .toList(),
                 );
                 return ref.invoke(member.simpleName, listParams).reflectee;
               } catch (e) {
                 return HttpResponse(
                   body: {
                     "message": "Something went wrong",
-                    "error": e,
+                    "error": e.toString(),
                   },
                   status: 500,
                 );
@@ -125,29 +118,8 @@ abstract class ControllerReflections {
     });
     return routes;
   }
-
-  static List urlParams(
-      HttpRequest request, List<MapEntry<Type, String>> declaredParams) {
-    List<dynamic> listParams = [];
-    final splittedPath =
-        request.path.split(":").map((e) => e.replaceAll("/", "")).toList();
-    if (splittedPath.length > 1) {
-      splittedPath.removeAt(0);
-      for (var pathParam in splittedPath) {
-        if (declaredParams
-            .where((element) =>
-                element.value == pathParam && element.key.toString() == "int")
-            .isNotEmpty) {
-          listParams.add(int.tryParse(request.params![pathParam]) ?? 0);
-          continue;
-        }
-        listParams.add(request.params![pathParam]);
-      }
-    }
-    return listParams;
-  }
 }
 
-abstract class BodyDto {
-  BodyDto fromMap(Map body);
+class Body {
+  const Body();
 }

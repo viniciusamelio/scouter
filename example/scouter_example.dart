@@ -9,14 +9,16 @@ class XesqueDto {
   });
   final String? name;
   final int? xesquedele;
-  final Map data;
+  final List<Data> data;
 }
 
 class Data {
   Data({
-    required this.name,
+    required this.status,
+    required this.id,
   });
-  String name;
+  final String status;
+  final int id;
 }
 
 @HttpController()
@@ -153,7 +155,7 @@ void main() async {
         GameController(),
       ],
     ),
-    port: 8084,
+    port: 8080,
   );
 }
 

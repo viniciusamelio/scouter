@@ -1,5 +1,7 @@
 import 'dart:mirrors';
 
+import 'package:scouter/src/application/dto/mappable_input.dart';
+
 import '../../domain/route.dart';
 
 abstract class RequestParameterReflections {
@@ -53,6 +55,14 @@ abstract class RequestParameterReflections {
       return request.body[e.value];
     } else if (e.key == HttpRequest) {
       return request;
+    } else if (reflectType(e.key).isAssignableTo(reflectType(MappableInput))) {
+      return reflectClass(e.key)
+          .newInstance(reflectClass(e.key).owner!.simpleName, []).invoke(
+        #parse,
+        [
+          request.body,
+        ],
+      ).reflectee;
     }
     final dtoType = parameters.last.type.reflectedType;
     final reflectedDto = reflectClass(dtoType);
@@ -80,7 +90,7 @@ abstract class RequestParameterReflections {
           // value = value
           //     .map((e) => _parseCustomDtoVariable(valueType, request, e))
           //     .toList();
-          // TODO: Preciso conseguir fazer o cast do objeto
+          // TODO: It will be needed to get the right cast from List<T> in the future
           value = value
               .map(
                 (e) => _parseCustomDtoVariable(

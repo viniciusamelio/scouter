@@ -1,15 +1,27 @@
 import "package:scouter/scouter.dart";
+import 'package:scouter/src/application/dto/mappable_input.dart';
 import 'package:scouter/src/application/reflections/controller_reflections.dart';
 
-class XesqueDto {
+class XesqueDto extends MappableInput {
   XesqueDto({
-    required this.name,
-    required this.xesquedele,
-    required this.data,
+    this.name,
+    this.xesquedele,
+    this.data,
   });
   final String? name;
   final int? xesquedele;
-  final List<Data> data;
+  final List<Data>? data;
+
+  @override
+  MappableInput parse(dynamic map) {
+    return XesqueDto(
+      name: map["name"],
+      xesquedele: map["xesquedele"],
+      data: (map["data"] as List)
+          .map((e) => Data(status: e["status"], id: e["id"]))
+          .toList(),
+    );
+  }
 }
 
 class Data {
@@ -161,17 +173,4 @@ void main() async {
 
 class FakeProvider {
   String name = "fakezão";
-}
-
-class MappableDto {
-  MappableDto(
-    this.data,
-    this.uuid,
-  );
-  final String data;
-  final String uuid;
-  static MappableDto fromMap(Map map) => MappableDto(
-        map["data"],
-        map["uuid"],
-      );
 }

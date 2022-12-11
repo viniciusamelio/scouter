@@ -43,6 +43,7 @@ class FeatureController extends RestController {
     );
   }
 
+  // TODO: adicionar mais exemplos de requests com os params e o @Body simples
   @Post("/:id/:uid/")
   getById(int id, String uid, @Body() ComplexDto dto) {
     return {

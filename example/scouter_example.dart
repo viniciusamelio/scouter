@@ -2,8 +2,8 @@ import "package:scouter/scouter.dart";
 import 'package:scouter/src/application/dto/mappable_input.dart';
 import 'package:scouter/src/application/reflections/controller_reflections.dart';
 
-class XesqueDto extends MappableInput {
-  XesqueDto({
+class ComplexDto extends MappableInput {
+  ComplexDto({
     this.name,
     this.xesquedele,
     this.data,
@@ -14,7 +14,7 @@ class XesqueDto extends MappableInput {
 
   @override
   MappableInput parse(dynamic map) {
-    return XesqueDto(
+    return ComplexDto(
       name: map["name"],
       xesquedele: map["xesquedele"],
       data: (map["data"] as List)
@@ -44,7 +44,7 @@ class FeatureController extends RestController {
   }
 
   @Post("/:id/:uid/")
-  getById(int id, String uid, @Body() XesqueDto dto) {
+  getById(int id, String uid, @Body() ComplexDto dto) {
     return {
       "id": dto,
     };

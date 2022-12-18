@@ -141,6 +141,73 @@ You can declare dynamic routes this way:
     ...
   }
 ```
+
+You can also get your params declared in the route path this way:
+```dart
+  @Get("/:id")
+  getById(int id) async {
+    await doSomething(id)
+    ...
+  }
+```
+It is important to notice you can also get more than one path variable this way, but you have to be aware of two points: <br>
+1 - Your function name <b>must</b> be the same as your url variable; <br>
+2 - You need to get them in the same order they are being declared in your url.
+```dart
+  @Post("/:docId/:id")
+  saveThroughDocument(int docId,int id) async {
+    final document = await repo.getDocById(docId);
+    await doSomething(id)
+    ...
+  }
+```
+
+
+### Body parsing
+You can automatically parse your body from a custom class you choose, just make sure your variables have the desired name. Such as in Response parsing, soon, it will be added a way to change the key name it will be get from the payload.
+```dart
+  @Post("/save/user")
+  saveUser(@Body() User user){
+    return user;
+  }
+```
+
+***Notice that:***
+- If your custom class to be used as request body contains a list of other non-native types, you **must** extends [MappableInput], this way:
+```dart
+  class ComplexDto extends MappableInput {
+    const ComplexDto({
+      this.name,
+      this.xesquedele,
+      this.data,
+    });
+    final String? name;
+    final int? xesquedele;
+    final List<Data>? data;
+
+    @override
+    MappableInput parse(dynamic map) {
+      return ComplexDto(
+        name: map["name"],
+        xesquedele: map["xesquedele"],
+        data: (map["data"] as List)
+            .map((e) => Data(status: e["status"], id: e["id"]))
+            .toList(),
+      );
+    }
+}
+```
+That is needed due to a difficult found about infering a type to a list of non-native objects, in the example above: a *Data* list. The list was always being casted as List< dynamic > even if its contents is only some *Data* instances.
+
+You can set the @Body() the same way you would do with other non-MappableInput class:
+```dart
+  @Put("/method")
+  aMethod(@Body() ComplexDto dto){
+    ...
+  }
+```
+
+
 ### Response parsing
 Routes can have a return type of HttpResponse itself, but it also supports a Map or even a CustomClass. The best part of using a custom class is
 that you will not need to parse it to a Map, Json or whatever. For example, if you try to return the following object from a route:

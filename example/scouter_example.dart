@@ -25,12 +25,19 @@ class ComplexDto extends MappableInput {
 }
 
 class Data {
-  Data({
+  const Data({
     required this.status,
     required this.id,
   });
   final String status;
   final int id;
+}
+
+class User {
+  const User({required this.name, required this.age});
+
+  final String name;
+  final int age;
 }
 
 @HttpController()
@@ -42,13 +49,16 @@ class FeatureController extends RestController {
       ),
     );
   }
-
-  // TODO: adicionar mais exemplos de requests com os params e o @Body simples
   @Post("/:id/:uid/")
   getById(int id, String uid, @Body() ComplexDto dto) {
     return {
       "id": dto,
     };
+  }
+
+  @Post("/save/user")
+  saveUser(@Body() User user) {
+    return user;
   }
 
   @Post("/save/:id")

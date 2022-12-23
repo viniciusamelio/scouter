@@ -95,7 +95,6 @@ void main() {
     final response = ResponseReflections.getResponseFromObject(dto);
 
     expect(response.status, equals(200));
-    expect(response.body["employees"], isA<List<Map<String, dynamic>>>());
     expect(response.body["employees"].first["email"],
         equals(dto.employees.first.email));
     expect(response.body["employees"].first["login"],

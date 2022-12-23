@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:scouter/src/domain/middleware.dart';
 
 import '../application/controller/rest_controller.dart';
@@ -19,6 +21,7 @@ abstract class Module {
     required this.preffix,
     this.controllers = const [],
     this.middlewares = const [],
+    this.init,
   }) : assert(
           preffix[0] != "/",
           "A Module's preffix must not start with '/' ",
@@ -28,4 +31,8 @@ abstract class Module {
   final List<HttpMiddleware> middlewares;
 
   final String preffix;
+
+  /// This function will be executed when module is parsed, when application is upping. <br>
+  /// You can use it to inject global scoped dependencies, for example.
+  final VoidCallback? init;
 }

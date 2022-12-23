@@ -51,6 +51,9 @@ Future<void> _setupChildModules(
   List<HttpMiddleware> appMiddlewares,
 ) async {
   for (final module in modules) {
+    if (module.init != null) {
+      module.init!();
+    }
     for (var controller in module.controllers) {
       for (var route in ControllerReflections.getControllerRoutes(controller)) {
         route.middlewares = [

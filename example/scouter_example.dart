@@ -1,4 +1,44 @@
 import "package:scouter/scouter.dart";
+import 'package:scouter/src/application/dto/mappable_input.dart';
+import 'package:scouter/src/application/reflections/controller_reflections.dart';
+
+class ComplexDto extends MappableInput {
+  ComplexDto({
+    this.name,
+    this.xesquedele,
+    this.data,
+  });
+  final String? name;
+  final int? xesquedele;
+  final List<Data>? data;
+
+  @override
+  MappableInput parse(dynamic map) {
+    return ComplexDto(
+      name: map["name"],
+      xesquedele: map["xesquedele"],
+      data: (map["data"] as List)
+          .map((e) => Data(status: e["status"], id: e["id"]))
+          .toList(),
+    );
+  }
+}
+
+class Data {
+  const Data({
+    required this.status,
+    required this.id,
+  });
+  final String status;
+  final int id;
+}
+
+class User {
+  const User({required this.name, required this.age});
+
+  final String name;
+  final int age;
+}
 
 @HttpController()
 class FeatureController extends RestController {
@@ -9,16 +49,20 @@ class FeatureController extends RestController {
       ),
     );
   }
-
-  @Get("/:id")
-  getById(HttpRequest request) {
+  @Post("/:id/:uid/")
+  getById(int id, String uid, @Body() ComplexDto dto) {
     return {
-      "id": request.params!["id"],
+      "id": dto,
     };
   }
 
-  @Post("/save")
-  HttpResponse save(HttpRequest request) {
+  @Post("/save/user")
+  saveUser(@Body() User user) {
+    return user;
+  }
+
+  @Post("/save/:id")
+  HttpResponse save(int id) {
     final FakeProvider teste = injected();
     return HttpResponse(
       body: {
@@ -134,7 +178,7 @@ void main() async {
         GameController(),
       ],
     ),
-    port: 8084,
+    port: 8080,
   );
 }
 

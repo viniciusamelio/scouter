@@ -1,3 +1,9 @@
+## 1.1.0
+- Added: dynamic body parsing
+- Added: url variables getters
+- Added: Modules' init method
+- Chore: Improved automatic server error handling
+
 ## 1.0.4+1
 
 - Doc: Deploy and build info

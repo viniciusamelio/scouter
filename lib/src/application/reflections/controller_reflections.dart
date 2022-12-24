@@ -3,6 +3,7 @@ import 'dart:mirrors';
 import '../../domain/http_controller.dart';
 import '../../domain/http_verbs.dart';
 import '../../domain/route.dart';
+import 'request_parameter_reflections.dart';
 
 abstract class ControllerReflections {
   static List<HttpRoute> getControllerRoutes(dynamic clazz) {
@@ -31,7 +32,23 @@ abstract class ControllerReflections {
           .map<HttpVerb>((meta) => meta.reflectee as HttpVerb)
           .toList();
 
-      for (var annotation in httpVerbAnnotations) {
+      for (var i = 0; i < httpVerbAnnotations.length; i++) {
+        final annotation = httpVerbAnnotations[i];
+        final List<ParameterMirror> parameters = (member as dynamic).parameters;
+        final List<MapEntry<Type, String>> declaredParams = parameters
+            .map<MapEntry<Type, String>>(
+              (e) => MapEntry(
+                  e.type.reflectedType,
+                  e.simpleName
+                      .toString()
+                      .replaceAll("Symbol(", "")
+                      .replaceAll(")", "")
+                      .replaceAll('"', "")),
+            )
+            .toList();
+        final bool shouldUseHttpRequest = declaredParams
+            .where((element) => element.key == HttpRequest)
+            .isNotEmpty;
         routes.add(
           HttpRoute(
             verb: annotation.verb,
@@ -41,7 +58,59 @@ abstract class ControllerReflections {
             preffix:
                 "/${controllerAnnotation.reflectee.name != "" ? controllerAnnotation.reflectee.name.toString().toLowerCase() : ref.reflectee.runtimeType.toString().replaceAll('Controller', '').toLowerCase()}",
             handler: (HttpRequest request) async {
-              return ref.getField(member.simpleName).reflectee(request);
+              try {
+                // Simpler case, when no request param is required and expected handler argument is a Http Request
+                if (shouldUseHttpRequest && request.params!.isEmpty) {
+                  return ref.getField(member.simpleName).reflectee(request);
+                }
+
+                List<dynamic> listParams = [];
+                // Add params according to given name, in the following format :name. To handler's arguments with same declared name
+                if (request.params!.isNotEmpty && declaredParams.isNotEmpty) {
+                  listParams.addAll(
+                    RequestParameterReflections.handleUrlParams(
+                      request,
+                      declaredParams,
+                    ),
+                  );
+                }
+                listParams.addAll(
+                  declaredParams
+                      .where(
+                        // Ensuring parameter is not comming from url
+                        (element) =>
+                            !request.params!.containsKey(
+                              element.value,
+                            ) &&
+                            // Ensuring parameter is annotated with @Body()
+                            parameters
+                                .firstWhere(
+                                  (param) =>
+                                      param.type.reflectedType == element.key,
+                                )
+                                .metadata
+                                .where((metadata) => metadata.reflectee is Body)
+                                .isNotEmpty,
+                      )
+                      .map(
+                        (e) => RequestParameterReflections.handleBodyParams(
+                          e,
+                          request,
+                          parameters,
+                        ),
+                      )
+                      .toList(),
+                );
+                return ref.invoke(member.simpleName, listParams).reflectee;
+              } catch (e) {
+                return HttpResponse(
+                  body: {
+                    "message": "Something went wrong",
+                    "error": e.toString(),
+                  },
+                  status: 500,
+                );
+              }
             },
           ),
         );
@@ -49,4 +118,8 @@ abstract class ControllerReflections {
     });
     return routes;
   }
+}
+
+class Body {
+  const Body();
 }

@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:scouter/src/domain/module.dart';
 
 import "../../domain/middleware.dart";
@@ -30,4 +32,7 @@ class AppModule implements Module {
 
   /// Middlewares added here will be added to every single route in your application. Be careful
   final List<HttpMiddleware> globalMiddlewares;
+
+  @override
+  VoidCallback? get init => null;
 }

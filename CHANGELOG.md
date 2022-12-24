@@ -1,3 +1,6 @@
+## 1.1.0+1
+- Fixed: Modules' init function type
+
 ## 1.1.0
 - Added: dynamic body parsing
 - Added: url variables getters

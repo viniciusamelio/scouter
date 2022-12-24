@@ -177,6 +177,7 @@ void main() async {
         FeatureController(),
         GameController(),
       ],
+      init: () => print("Starting up"),
     ),
     port: 8080,
   );

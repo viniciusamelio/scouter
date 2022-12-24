@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:scouter/src/domain/module.dart';
 
 import "../../domain/middleware.dart";
@@ -13,6 +11,7 @@ class AppModule implements Module {
     this.modules = const [],
     this.middlewares = const [],
     this.globalMiddlewares = const [],
+    this.init,
   });
 
   @override
@@ -33,6 +32,7 @@ class AppModule implements Module {
   /// Middlewares added here will be added to every single route in your application. Be careful
   final List<HttpMiddleware> globalMiddlewares;
 
+  /// It runs on application starting up
   @override
-  VoidCallback? get init => null;
+  final void Function()? init;
 }

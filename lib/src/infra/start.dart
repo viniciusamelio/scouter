@@ -15,6 +15,7 @@ Future<void> runServer(
   final app = Alfred();
   app.typeHandlers.add(TypeHandler<HttpResponse>(((_, __, ___) => null)));
 
+  if (appModule.init != null) appModule.init!();
   await _setupAppModule(appModule, app);
   await _setupChildModules(
     appModule.modules,

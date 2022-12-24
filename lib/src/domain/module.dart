@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:scouter/src/domain/middleware.dart';
 
 import '../application/controller/rest_controller.dart';
@@ -34,5 +32,5 @@ abstract class Module {
 
   /// This function will be executed when module is parsed, when application is upping. <br>
   /// You can use it to inject global scoped dependencies, for example.
-  final VoidCallback? init;
+  final void Function()? init;
 }

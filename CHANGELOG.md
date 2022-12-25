@@ -1,3 +1,5 @@
+## 1.1.1 (WIP)
+- Added: InjectionManager's replace function
 ## 1.1.0+1
 - Fixed: Modules' init function type
 

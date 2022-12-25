@@ -19,6 +19,7 @@ abstract class InjectionManager<Injector> {
   final Injector injector;
 
   void register<T extends Object>(Injection<T> instance);
+  void replace<T extends Object>(Injection<T> injection);
 
   T get<T>([String? name]);
 }

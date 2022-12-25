@@ -17,7 +17,7 @@ class KiwiInjector implements InjectionManager<KiwiContainer> {
 
   static final KiwiInjector instance = KiwiInjector._internal();
 
-  /// Receives a Injection and register it according to its type (Factory or Singleton)
+  /// Receives an  Injection and register it according to its type (Factory or Singleton)
   @override
   void register<T extends Object>(Injection<T> injection) {
     final injectionInstance = injection;
@@ -33,5 +33,12 @@ class KiwiInjector implements InjectionManager<KiwiContainer> {
       (container) => injectionInstance.builder(),
       name: injectionInstance.name,
     );
+  }
+
+  /// Removes an instance of type <T> with same name (if provided), and register a new one through Injection param
+  @override
+  void replace<T extends Object>(Injection<T> injection) {
+    injector.unregister<T>(injection.name);
+    register<T>(injection);
   }
 }

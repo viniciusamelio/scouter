@@ -1,6 +1,5 @@
 import "package:scouter/scouter.dart";
 import 'package:scouter/src/application/dto/mappable_input.dart';
-import 'package:scouter/src/application/reflections/controller_reflections.dart';
 
 class ComplexDto extends MappableInput {
   ComplexDto({

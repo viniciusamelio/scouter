@@ -6,3 +6,6 @@ export "di/injections.dart";
 export "di/injector.dart";
 // App Module
 export "module/app_module.dart";
+
+// Annotations
+export "annotations.dart";

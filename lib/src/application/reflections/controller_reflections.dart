@@ -1,8 +1,6 @@
 import 'dart:mirrors';
 
-import '../../domain/http_controller.dart';
-import '../../domain/http_verbs.dart';
-import '../../domain/route.dart';
+import 'package:scouter/scouter.dart';
 import 'request_parameter_reflections.dart';
 
 abstract class ControllerReflections {
@@ -118,8 +116,4 @@ abstract class ControllerReflections {
     });
     return routes;
   }
-}
-
-class Body {
-  const Body();
 }

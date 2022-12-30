@@ -1,12 +1,9 @@
-import 'package:scouter/src/domain/module.dart';
-
-import "../../domain/middleware.dart";
-import '../controller/rest_controller.dart';
+import 'package:scouter/scouter.dart';
 
 /// Your application root module, here you will add your modules, controllers, etc. <br>
 /// It must be your application entry point, which should be provided to the runServer() function
-class AppModule implements Module {
-  const AppModule({
+class AppModule with Injectable implements Module {
+  AppModule({
     this.controllers = const [],
     this.modules = const [],
     this.middlewares = const [],

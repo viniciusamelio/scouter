@@ -1,4 +1,6 @@
-## 1.1.1 (WIP)
+## 1.1.1+1
+- Added: Injectable to App Module
+## 1.1.1
 - Added: InjectionManager's replace function
 ## 1.1.0+1
 - Fixed: Modules' init function type

@@ -1,3 +1,5 @@
+## 1.1.1+2
+- Added: Allowing modules' preffix to be null
 ## 1.1.1+1
 - Added: Injectable to App Module
 ## 1.1.1

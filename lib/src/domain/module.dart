@@ -16,19 +16,19 @@ import '../application/controller/rest_controller.dart';
 /// The example above will make every route inside any controller of it follow this format: /any/controller/route
 abstract class Module {
   Module({
-    required this.preffix,
+    this.preffix,
     this.controllers = const [],
     this.middlewares = const [],
     this.init,
   }) : assert(
-          preffix[0] != "/",
+          preffix?[0] != "/",
           "A Module's preffix must not start with '/' ",
         );
 
   final List<RestController> controllers;
   final List<HttpMiddleware> middlewares;
 
-  final String preffix;
+  final String? preffix;
 
   /// This function will be executed when module is parsed, when application is upping. <br>
   /// You can use it to inject global scoped dependencies, for example.

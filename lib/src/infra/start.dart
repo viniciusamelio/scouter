@@ -62,8 +62,8 @@ Future<void> _setupChildModules(
           ...module.middlewares,
           ...appMiddlewares,
         ];
-        if (module.preffix.isNotEmpty) {
-          route.preffix = "/${module.preffix.replaceAll(
+        if (module.preffix != null && module.preffix!.isNotEmpty) {
+          route.preffix = "/${module.preffix!.replaceAll(
             '/',
             '',
           )}${route.preffix}";

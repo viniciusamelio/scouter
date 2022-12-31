@@ -150,7 +150,7 @@ class Teste {
 }
 
 class TestModule extends Module {
-  TestModule({super.preffix = "teste"});
+  TestModule({super.preffix});
 
   @override
   List<RestController> get controllers => [

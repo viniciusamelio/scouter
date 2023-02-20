@@ -1,3 +1,5 @@
+## 1.1.2
+- Added: Query params
 ## 1.1.1+2
 - Added: Allowing modules' preffix to be null
 ## 1.1.1+1

@@ -35,6 +35,7 @@ _handlerParser(
     body: await req.body,
     params: req.params,
     path: req.route,
+    queryParams: req.uri.queryParameters,
   );
   final response = ResponseReflections.getResponseFromObject(
     await handler(request),

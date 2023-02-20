@@ -55,6 +55,13 @@ class FeatureController extends RestController {
     };
   }
 
+  @Get("/query/:uuid")
+  search(String uuid, @QueryParam() Map queryParams) {
+    return {
+      "name": queryParams["name"],
+    };
+  }
+
   @Post("/save/user")
   saveUser(@Body() User user) {
     return user;

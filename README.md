@@ -208,6 +208,29 @@ You can set the @Body() the same way you would do with other non-MappableInput c
 ```
 
 
+### Query Params
+Just like **Body**, query parameters can be added to your route by adding an annotation to your method argument.
+Its type will always need to be set as Map, and you always will need to declare the query param as the last argument.
+
+```dart
+  @Get("/query/:uuid")
+  search(String uuid, @QueryParam() Map queryParams) {
+    return {
+      "name": queryParams["name"],
+    };
+  }
+```
+If you prefer, you can algo get it from the default HttpRequest object:
+```dart
+  @Get("/query/:uuid")
+  search(HttpRequest request) {
+    return {
+      "name": request.queryParams["name"],
+    };
+  }
+```
+
+
 ### Response parsing
 Routes can have a return type of HttpResponse itself, but it also supports a Map or even a CustomClass. The best part of using a custom class is
 that you will not need to parse it to a Map, Json or whatever. For example, if you try to return the following object from a route:

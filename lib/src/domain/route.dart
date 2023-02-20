@@ -13,6 +13,7 @@ class HttpRequest {
     this.body,
     this.params,
     this.middlewares = const [],
+    this.queryParams = const {},
   });
 
   /// Requested url
@@ -20,6 +21,9 @@ class HttpRequest {
 
   /// Request headers
   final Map<String, dynamic> headers;
+
+  // Query params
+  final Map<String, dynamic> queryParams;
 
   /// Request body sent, it can be null
   final dynamic body;

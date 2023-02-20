@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   alfred: ^1.0.0+1
-  fpdart: ^0.2.0
+  fpdart: ^0.4.0
   kiwi: ^4.0.2
 
 dev_dependencies:

@@ -100,12 +100,21 @@ abstract class ControllerReflections {
                       .toList(),
                 );
                 if (parameters
-                    .firstWhere((param) => param.type.reflectedType == Map)
-                    .metadata
-                    .where((metada) => metada.reflectee is QueryParam)
+                    .where(
+                      (param) => param.metadata
+                          .where((meta) => meta.reflectee is QueryParam)
+                          .isNotEmpty,
+                    )
                     .isNotEmpty) {
-                  listParams.add(request.queryParams);
+                  if (parameters
+                      .firstWhere((param) => param.type.reflectedType == Map)
+                      .metadata
+                      .where((metada) => metada.reflectee is QueryParam)
+                      .isNotEmpty) {
+                    listParams.add(request.queryParams);
+                  }
                 }
+
                 return ref.invoke(member.simpleName, listParams).reflectee;
               } catch (e) {
                 return HttpResponse(

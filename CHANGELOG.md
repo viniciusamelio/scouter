@@ -1,3 +1,5 @@
+## 1.1.2+1
+- Fix: QueryParam checking
 ## 1.1.2
 - Added: Query params
 ## 1.1.1+2

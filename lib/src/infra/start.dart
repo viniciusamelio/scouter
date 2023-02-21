@@ -66,7 +66,7 @@ Future<void> _setupChildModules(
           route.preffix = "/${module.preffix!.replaceAll(
             '/',
             '',
-          )}${route.preffix}";
+          )}${route.preffix != module.preffix!.replaceAll('/', '') ? route.preffix : ''}";
         }
         app.routes.add(
           AlfredRouteParser.parse(route),

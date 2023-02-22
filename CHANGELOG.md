@@ -1,3 +1,5 @@
+## 1.1.2+3
+- Fix: Comparing controller preffix to module preffix instead of route itself
 ## 1.1.2+2
 - Fix: Disabling duplicated route preffix when both controller and module has the same name
 ## 1.1.2+1

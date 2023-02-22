@@ -1,3 +1,5 @@
+## 1.1.2+4
+- Fix: Checking empty controller preffix
 ## 1.1.2+3
 - Fix: Comparing controller preffix to module preffix instead of route itself
 ## 1.1.2+2

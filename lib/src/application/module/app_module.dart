@@ -31,5 +31,5 @@ class AppModule with Injectable implements Module {
 
   /// It runs on application starting up
   @override
-  final void Function()? init;
+  final Future<void> Function()? init;
 }

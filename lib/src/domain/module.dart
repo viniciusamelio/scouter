@@ -32,5 +32,5 @@ abstract class Module {
 
   /// This function will be executed when module is parsed, when application is upping. <br>
   /// You can use it to inject global scoped dependencies, for example.
-  final void Function()? init;
+  final Future<void> Function()? init;
 }

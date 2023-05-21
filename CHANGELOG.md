@@ -1,3 +1,5 @@
+## 1.1.3+1
+- Feature: changing module's init method to be a Future<void> instead of void
 ## 1.1.2+4
 - Fix: Checking empty controller preffix
 ## 1.1.2+3

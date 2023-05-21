@@ -53,7 +53,7 @@ Future<void> _setupChildModules(
 ) async {
   for (final module in modules) {
     if (module.init != null) {
-      module.init!();
+      await module.init!();
     }
     for (var controller in module.controllers) {
       for (var route in ControllerReflections.getControllerRoutes(controller)) {
